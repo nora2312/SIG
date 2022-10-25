@@ -40,6 +40,7 @@ public class ItemsTableModule extends AbstractTableModel{
     }
 
     public ArrayList<InvoiceItem> getItems() {
+    
         return items;
     }
 

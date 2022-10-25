@@ -6,6 +6,7 @@ package proj.view;
 
 import java.util.ArrayList;
 import javax.swing.JButton;
+import javax.swing.table.JTableHeader;
 import proj.control.InvController;
 import proj.model.InvoiceHeader;
 import proj.model.InvoiceItem;
@@ -63,7 +64,6 @@ public class ProjFram extends javax.swing.JFrame {
 
         headerTbl.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {},
                 {},
                 {},
                 {}
@@ -163,13 +163,13 @@ public class ProjFram extends javax.swing.JFrame {
                             .addComponent(cuslbl, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(invdatelbl, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 311, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGap(36, 36, 36)
                         .addComponent(newItemBtn)
                         .addGap(36, 36, 36)
-                        .addComponent(delItemBtn)))
+                        .addComponent(delItemBtn))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 359, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
@@ -303,6 +303,7 @@ public class ProjFram extends javax.swing.JFrame {
 
     private ArrayList<InvoiceItem> items;
     private ItemsTableModule itemsTable = new ItemsTableModule(items);
+   
 
     public ArrayList<InvoiceHeader> getInvoices() {
         return invoices;
@@ -397,9 +398,7 @@ public class ProjFram extends javax.swing.JFrame {
     }
 
     public ArrayList<InvoiceItem> getItems() {
-        if (items == null) {
-            items = new ArrayList<>();
-        }
+       
         return items;
     }
 
@@ -424,5 +423,9 @@ public class ProjFram extends javax.swing.JFrame {
         }
         return num;
     }
+    
+    public void ChangeName(javax.swing.JTable headerTbl , int col_index, String col_name){
+		headerTbl.getColumnModel().getColumn(col_index).setHeaderValue(col_name);
+	}
 
 }

@@ -92,11 +92,26 @@ public class InvController implements ActionListener, ListSelectionListener {
         int selectedIndex = frame.getHeaderTbl().getSelectedRow();
         if (selectedIndex != -1) {
             ArrayList< InvoiceHeader> invoices = frame.getInvoices();
-            invoices.remove(selectedIndex);
+            InvoiceHeader invoice = frame.getInvoices().get(selectedIndex);
 
+            ItemsTableModule itemtable = new ItemsTableModule(invoice.getItem());
+            ArrayList<InvoiceItem> item = itemtable.getItems();
+
+            item.removeAll(item);
+
+            invoices.remove(selectedIndex);
             frame.getInvoiceTable().fireTableDataChanged();
-        }else
-        JOptionPane.showMessageDialog(frame, "You Should Select InvoiceHeader", "Error", JOptionPane.ERROR_MESSAGE);
+            frame.getItemsTbl().setModel(itemtable);
+            frame.ChangeName(frame.getItemsTbl(), 0, "No.");
+            frame.ChangeName(frame.getItemsTbl(), 1, "Item Name");
+            frame.ChangeName(frame.getItemsTbl(), 2, "Item Price");
+            frame.ChangeName(frame.getItemsTbl(), 3, "Item Count");
+            frame.ChangeName(frame.getItemsTbl(), 4, "Total");
+            itemtable.fireTableDataChanged();
+            frame.getItemsTable().fireTableDataChanged();
+        } else {
+            JOptionPane.showMessageDialog(frame, "You Should Select InvoiceHeader", "Error", JOptionPane.ERROR_MESSAGE);
+        }
     }
 
     private void newItem() {
@@ -107,8 +122,9 @@ public class InvController implements ActionListener, ListSelectionListener {
             itemDialog.setSize(400, 150);
             itemDialog.setLocation(50, 50);
             itemDialog.setTitle("Create New Item");
-        }else
-        JOptionPane.showMessageDialog(frame, "You Should Select Invoice Header", "Error", JOptionPane.ERROR_MESSAGE);
+        } else {
+            JOptionPane.showMessageDialog(frame, "You Should Select Invoice Header", "Error", JOptionPane.ERROR_MESSAGE);
+        }
 
     }
 
@@ -127,10 +143,10 @@ public class InvController implements ActionListener, ListSelectionListener {
             frame.getItemsTbl().setModel(itemtable);
             itemtable.fireTableDataChanged();
             frame.getInvoiceTable().fireTableDataChanged();
-        }else if(seletedRowInv == -1){
-        JOptionPane.showMessageDialog(frame, "You Should Select Invoice Header", "Error", JOptionPane.ERROR_MESSAGE);
-        }else {
-                    JOptionPane.showMessageDialog(frame, "You Should Select Item", "Error", JOptionPane.ERROR_MESSAGE);
+        } else if (seletedRowInv == -1) {
+            JOptionPane.showMessageDialog(frame, "You Should Select Invoice Header", "Error", JOptionPane.ERROR_MESSAGE);
+        } else {
+            JOptionPane.showMessageDialog(frame, "You Should Select Item", "Error", JOptionPane.ERROR_MESSAGE);
 
         }
     }
@@ -147,6 +163,12 @@ public class InvController implements ActionListener, ListSelectionListener {
             frame.getTotallbl().setText("" + currentInvHeader.getTotalInv());
             ItemsTableModule items = new ItemsTableModule(currentInvHeader.getItem());
             frame.getItemsTbl().setModel(items);
+            frame.ChangeName(frame.getItemsTbl(), 0, "No.");
+            frame.ChangeName(frame.getItemsTbl(), 1, "Item Name");
+            frame.ChangeName(frame.getItemsTbl(), 2, "Item Price");
+            frame.ChangeName(frame.getItemsTbl(), 3, "Item Count");
+            frame.ChangeName(frame.getItemsTbl(), 4, "Total");
+
             items.fireTableDataChanged();
 
         }
@@ -162,68 +184,88 @@ public class InvController implements ActionListener, ListSelectionListener {
             if (i == JFileChooser.APPROVE_OPTION) {
                 File file = fc.getSelectedFile();
                 Path filepath = Paths.get(file.getAbsolutePath());
+
                 java.util.List<String> headerlines = Files.readAllLines(filepath);
-                for (String line : headerlines) {
-                    String[] lineparts = line.split(",");
+                try {
+                    for (String line : headerlines) {
+                        String[] lineparts = line.split(",");
 
-                    int invnum = Integer.parseInt(lineparts[0]);
-                    String date = lineparts[1];
-                    String invname = lineparts[2];
-                    InvoiceHeader header = new InvoiceHeader(invnum, date, invname);
-                    headerlist.add(header);
-                }
-            }
-        } catch (Exception ex) {
-            ex.printStackTrace();
-            JOptionPane.showMessageDialog(frame, "Error in format file", "Error", JOptionPane.ERROR_MESSAGE);
-
-        }
-        try {
-            int i = fc.showOpenDialog(null);
-            if (i == JFileChooser.APPROVE_OPTION) {
-                File file = fc.getSelectedFile();
-                Path filepath = Paths.get(file.getAbsolutePath());
-                java.util.List<String> itemlines = Files.readAllLines(filepath);
-
-                for (String item : itemlines) {
-                    String[] itemsparts = item.split(",");
-                    int itemnum = Integer.parseInt(itemsparts[0]);
-                    String itemname = itemsparts[1];
-                    double price = Double.parseDouble(itemsparts[2]);
-                    int count = Integer.parseInt(itemsparts[3]);
-                    InvoiceHeader headerInv = null;
-                    for (InvoiceHeader headerInvs : headerlist) {
-
-                        if (itemnum == headerInvs.getInvNum()) {
-                            headerInv = headerInvs;
-                            break;
-                        }
+                        int invnum = Integer.parseInt(lineparts[0]);
+                        String date = lineparts[1];
+                        String invname = lineparts[2];
+                        InvoiceHeader header = new InvoiceHeader(invnum, date, invname);
+                        headerlist.add(header);
                     }
-                    InvoiceItem itemObj = new InvoiceItem(itemnum, itemname, count, price, headerInv);
-                    InvoiceItem itemss = new InvoiceItem(itemnum, itemname, count, price);
-                    headerInv.getItem().add(itemObj);
-                    itemlist.add(itemss);
+                } catch (Exception ex) {
+
+                    JOptionPane.showMessageDialog(frame, "Wrong File Format", "Error", JOptionPane.ERROR_MESSAGE);
                 }
-                frame.setInvoices(headerlist);
-                InvoicesTableModel invoiceTableModel = new InvoicesTableModel(headerlist);
 
-                frame.setInvoiceTable(invoiceTableModel);
-                frame.getHeaderTbl().setModel(invoiceTableModel);
-                frame.getInvoiceTable().fireTableDataChanged();
-
-                frame.getNewInvBtn().setEnabled(true);
-                frame.getDeltInvBtn().setEnabled(true);
-                frame.getNewItemBtn().setEnabled(true);
-                frame.getDelItemBtn().setEnabled(true);
             }
-
         } catch (Exception ex) {
-            ex.printStackTrace();
-            JOptionPane.showMessageDialog(frame, "Error in format file", "Error", JOptionPane.ERROR_MESSAGE);
+            //ex.printStackTrace();
+            JOptionPane.showMessageDialog(frame, "File Not Exits", "Error", JOptionPane.ERROR_MESSAGE);
+
         }
+
+        int x = fc.showOpenDialog(null);
+        if (x == JFileChooser.APPROVE_OPTION) {
+            File files = fc.getSelectedFile();
+            Path filepaths = Paths.get(files.getAbsolutePath());
+            try {
+                if (filepaths != null) {
+                    java.util.List<String> itemlines = Files.readAllLines(filepaths);
+                    try {
+                        for (String item : itemlines) {
+                            String[] itemsparts = item.split(",");
+                            int itemnum = Integer.parseInt(itemsparts[0]);
+                            String itemname = itemsparts[1];
+                            double price = Double.parseDouble(itemsparts[2]);
+                            int count = Integer.parseInt(itemsparts[3]);
+                            InvoiceHeader headerInv = null;
+                            for (InvoiceHeader headerInvs : headerlist) {
+
+                                if (itemnum == headerInvs.getInvNum()) {
+                                    headerInv = headerInvs;
+                                    break;
+                                }
+                            }
+                            InvoiceItem itemObj = new InvoiceItem(itemnum, itemname, count, price, headerInv);
+                            InvoiceItem itemss = new InvoiceItem(itemnum, itemname, count, price);
+                            headerInv.getItem().add(itemObj);
+
+                            itemlist.add(itemss);
+                        }
+                    } catch (Exception ex) {
+
+                        JOptionPane.showMessageDialog(frame, "Wrong File Format", "Error", JOptionPane.ERROR_MESSAGE);
+                    }
+                    frame.setInvoices(headerlist);
+                    InvoicesTableModel invoiceTableModel = new InvoicesTableModel(headerlist);
+
+                    frame.setInvoiceTable(invoiceTableModel);
+                    frame.getHeaderTbl().setModel(invoiceTableModel);
+                    frame.ChangeName(frame.getHeaderTbl(), 0, "No.");
+                    frame.ChangeName(frame.getHeaderTbl(), 1, "Data");
+                    frame.ChangeName(frame.getHeaderTbl(), 2, "Customer");
+                    frame.ChangeName(frame.getHeaderTbl(), 3, "Total");
+
+                    frame.getInvoiceTable().fireTableDataChanged();
+
+                    frame.getNewInvBtn().setEnabled(true);
+                    frame.getDeltInvBtn().setEnabled(true);
+                    frame.getNewItemBtn().setEnabled(true);
+                    frame.getDelItemBtn().setEnabled(true);
+                }
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(frame, "File2 Not Exits ", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+
     }
 
-    private void saveData() {
+
+private void saveData() {
         ArrayList<InvoiceHeader> invoices = frame.getInvoices();
         if (invoices != null) {
             String headrs = "";
@@ -259,14 +301,15 @@ public class InvController implements ActionListener, ListSelectionListener {
                     ItemFw.close();
                 }
             } catch (Exception e) {
+                JOptionPane.showMessageDialog(frame, "You Should Upload Files ", "Error", JOptionPane.ERROR_MESSAGE);
+
             }
         }
-        JOptionPane.showMessageDialog(frame, "You Should Upload Files ", "Error", JOptionPane.ERROR_MESSAGE);
 
     }
 
     @SuppressWarnings("empty-statement")
-    private void newInvoiceOk() {
+private void newInvoiceOk() {
 
         String customerName = invoiceDialog.getCustomerName().getText();
         String invoiceDate = invoiceDialog.getInvoiceDate().getText();
@@ -276,10 +319,10 @@ public class InvController implements ActionListener, ListSelectionListener {
             int day = Integer.parseInt(DateParts[0]);
             int month = Integer.parseInt(DateParts[1]);
             if (DateParts.length < 3) {
-                JOptionPane.showMessageDialog(frame, "Invaild Data Format", "Error", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(frame, "Wrong Data Format, should be DD-MM-YYYY ", "Error", JOptionPane.ERROR_MESSAGE);
             } else if (day > 32 || month > 12) {
 
-                JOptionPane.showMessageDialog(frame, "Invaild Data Format", "Error", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(frame, "Wrong Data Format, should be DD-MM-YYYY", "Error", JOptionPane.ERROR_MESSAGE);
 
             } else {
                 InvoiceHeader invoice = new InvoiceHeader(invnum, invoiceDate, customerName);
@@ -289,7 +332,7 @@ public class InvController implements ActionListener, ListSelectionListener {
                 invoiceDialog = null;
             }
         } catch (Exception ex) {
-            JOptionPane.showMessageDialog(frame, "Invaild Data Format", "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(frame, "Wrong Data Format, should be DD-MM-YYYY", "Error", JOptionPane.ERROR_MESSAGE);
         }
 
     }
@@ -302,32 +345,30 @@ public class InvController implements ActionListener, ListSelectionListener {
     private void NewItemOk() {
 
         String ItemName = itemDialog.getItemNameTxt().getText();
-       try {
+        try {
             double Price = Double.parseDouble(itemDialog.getItemPriceTxt().getText());
             int count = Integer.parseInt(itemDialog.getItemCountTxt().getText());
 
-           // try {
-                int selectedInvoice = frame.getHeaderTbl().getSelectedRow();
+            // try {
+            int selectedInvoice = frame.getHeaderTbl().getSelectedRow();
 
-                if (selectedInvoice != -1) {
-                    InvoiceHeader invHeader = frame.getInvoices().get(selectedInvoice);
-                    InvoiceItem invItem = new InvoiceItem(invHeader.getInvNum(), ItemName, count, Price, invHeader);
-                    // invItem.getTotal();
-                    invHeader.getItem().add(invItem);
-                    ItemsTableModule itemTableModule = (ItemsTableModule) frame.getItemsTbl().getModel();
-                    itemTableModule.getItems();
-                    itemTableModule.fireTableDataChanged();
-                    frame.getInvoiceTable().fireTableDataChanged();
+            if (selectedInvoice != -1) {
+                InvoiceHeader invHeader = frame.getInvoices().get(selectedInvoice);
+                InvoiceItem invItem = new InvoiceItem(invHeader.getInvNum(), ItemName, count, Price, invHeader);
+                // invItem.getTotal();
+                invHeader.getItem().add(invItem);
+                ItemsTableModule itemTableModule = (ItemsTableModule) frame.getItemsTbl().getModel();
+                itemTableModule.getItems();
+                itemTableModule.fireTableDataChanged();
+                frame.getInvoiceTable().fireTableDataChanged();
 
-                }
-            //} catch (Exception e) {
-               // System.out.println("check point");
-               // JOptionPane.showMessageDialog(frame, "You Should Select InvoiceHeader", "Error", JOptionPane.ERROR_MESSAGE);
             }
-
-        catch (NumberFormatException nfe) {
+            //} catch (Exception e) {
+            // System.out.println("check point");
+            // JOptionPane.showMessageDialog(frame, "You Should Select InvoiceHeader", "Error", JOptionPane.ERROR_MESSAGE);
+        } catch (NumberFormatException nfe) {
             JOptionPane.showMessageDialog(frame, "Invaild format", "Error", JOptionPane.ERROR_MESSAGE);
-      }
+        }
         itemDialog.dispose();
         itemDialog = null;
     }
