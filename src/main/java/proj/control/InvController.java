@@ -20,6 +20,8 @@ import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import javax.swing.event.TableModelEvent;
+import javax.swing.table.TableModel;
 import proj.model.InvoiceHeader;
 import proj.model.InvoiceItem;
 import proj.view.InvoiceDialog;
@@ -45,18 +47,18 @@ public class InvController implements ActionListener, ListSelectionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         switch (e.getActionCommand()) {
-            case "New Invoice":
+            case "Create New Invoice":
                 newInvoice();
                 break;
             case "Delete Invoice":
                 deleteInvoice();
                 break;
-            case "New Item":
+            /*  case "New Item":
                 newItem();
                 break;
             case "Delete Item":
                 deleteItem();
-                break;
+                break;*/
             case "Load Data":
                 loadData();
                 break;
@@ -75,6 +77,12 @@ public class InvController implements ActionListener, ListSelectionListener {
             case "NewItemCancel":
                 NewItemCancel();
                 break;
+            case "Save":
+                SaveInvoice();
+                break;
+            case "Cancel":
+                CancelInvoice();
+                break;
 
         }
     }
@@ -89,32 +97,62 @@ public class InvController implements ActionListener, ListSelectionListener {
     }
 
     private void deleteInvoice() {
-        int selectedIndex = frame.getHeaderTbl().getSelectedRow();
-        if (selectedIndex != -1) {
-            ArrayList< InvoiceHeader> invoices = frame.getInvoices();
-            InvoiceHeader invoice = frame.getInvoices().get(selectedIndex);
+        int seletedRowInv = frame.getHeaderTbl().getSelectedRow();
+        int selectRowItem = frame.getItemsTbl().getSelectedRow();
+        try {
+            if (seletedRowInv != -1) {
+                InvoiceHeader invoice = frame.getInvoices().remove(seletedRowInv);
+                ArrayList<InvoiceItem> ItemList = invoice.getItem();
+                frame.getInvoiceTable().fireTableDataChanged();
+                ItemList.removeAll(ItemList);
+                ItemsTableModule itemtable = new ItemsTableModule(ItemList);
+                frame.getItemsTbl().setModel(itemtable);
+                frame.ChangeName(frame.getItemsTbl(), 0, "No.");
+                frame.ChangeName(frame.getItemsTbl(), 1, "Item Name");
+                frame.ChangeName(frame.getItemsTbl(), 2, "Item Price");
+                frame.ChangeName(frame.getItemsTbl(), 3, "Count");
+                frame.ChangeName(frame.getItemsTbl(), 4, "ITem Total");
+                itemtable.fireTableDataChanged();
+                System.out.println("invoice deleted");
 
-            ItemsTableModule itemtable = new ItemsTableModule(invoice.getItem());
-            ArrayList<InvoiceItem> item = itemtable.getItems();
-
-            item.removeAll(item);
-
-            invoices.remove(selectedIndex);
-            frame.getInvoiceTable().fireTableDataChanged();
-            frame.getItemsTbl().setModel(itemtable);
-            frame.ChangeName(frame.getItemsTbl(), 0, "No.");
-            frame.ChangeName(frame.getItemsTbl(), 1, "Item Name");
-            frame.ChangeName(frame.getItemsTbl(), 2, "Item Price");
-            frame.ChangeName(frame.getItemsTbl(), 3, "Item Count");
-            frame.ChangeName(frame.getItemsTbl(), 4, "Total");
-            itemtable.fireTableDataChanged();
-            frame.getItemsTable().fireTableDataChanged();
-        } else {
-            JOptionPane.showMessageDialog(frame, "You Should Select InvoiceHeader", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
-    private void newItem() {
+    private void SaveInvoice() {
+        int selectRowInv = frame.getHeaderTbl().getSelectedRow();
+        if (selectRowInv != -1)
+        {
+
+            InvoiceHeader inv = new InvoiceHeader(Integer.parseInt(frame.getInvNumlbl().getText()), frame.getInvDateTXT().getText(), frame.getCustNameTxt().getText());
+            frame.getInvoiceTable().setValueAt(inv, selectRowInv, 0);
+            frame.getInvoiceTable().setValueAt(inv, selectRowInv, 1);
+            frame.getInvoiceTable().setValueAt(inv, selectRowInv, 2);
+
+            System.out.println("row updated");
+        } else
+            JOptionPane.showMessageDialog(frame, "Select invoice", "Error", JOptionPane.ERROR_MESSAGE);
+        
+    }
+
+    private void CancelInvoice() {
+         int selectRowInv = frame.getHeaderTbl().getSelectedRow();
+        if (selectRowInv != -1)
+        {
+             InvoiceHeader currentInvHeader = frame.getInvoices().get(selectRowInv);
+            frame.getInvNumlbl().setText("" + currentInvHeader.getInvNum());
+            frame.getInvDateTXT().setText("" + currentInvHeader.getInvDate());
+            frame.getCustNameTxt().setText(currentInvHeader.getCustName());
+            frame.getTotallbl().setText("" + currentInvHeader.getTotalInv());
+            System.out.println("row updated");
+        } else
+            JOptionPane.showMessageDialog(frame, "Select invoice", "Error", JOptionPane.ERROR_MESSAGE);
+        
+    }
+
+    /* private void newItem() {
         int selectedRow = frame.getHeaderTbl().getSelectedRow();
         if (selectedRow != -1) {
             itemDialog = new ItemDialog(frame);
@@ -126,48 +164,44 @@ public class InvController implements ActionListener, ListSelectionListener {
             JOptionPane.showMessageDialog(frame, "You Should Select Invoice Header", "Error", JOptionPane.ERROR_MESSAGE);
         }
 
-    }
+    }/*
 
-    private void deleteItem() {
+    /*private void deleteItem() {
         int seletedRowInv = frame.getHeaderTbl().getSelectedRow();
         int selectRowItem = frame.getItemsTbl().getSelectedRow();
         if (selectRowItem != -1 && seletedRowInv != -1) {
             InvoiceHeader invoice = frame.getInvoices().get(seletedRowInv);
             invoice.getItem().remove(selectRowItem);
-
-            InvoicesTableModel invoicesTableModel = new InvoicesTableModel(frame.getInvoices());
-            frame.getHeaderTbl().setModel(invoicesTableModel);
-            frame.getInvoiceTable().fireTableDataChanged();
-
             ItemsTableModule itemtable = new ItemsTableModule(invoice.getItem());
             frame.getItemsTbl().setModel(itemtable);
             itemtable.fireTableDataChanged();
             frame.getInvoiceTable().fireTableDataChanged();
+            System.err.println("item deleted");
         } else if (seletedRowInv == -1) {
             JOptionPane.showMessageDialog(frame, "You Should Select Invoice Header", "Error", JOptionPane.ERROR_MESSAGE);
         } else {
             JOptionPane.showMessageDialog(frame, "You Should Select Item", "Error", JOptionPane.ERROR_MESSAGE);
 
         }
-    }
-
+    }*/
     @Override
     public void valueChanged(ListSelectionEvent e) {
         int selectedIndex = frame.getHeaderTbl().getSelectedRow();
         if (selectedIndex != -1) {
-            System.err.println("" + selectedIndex);
+
             InvoiceHeader currentInvHeader = frame.getInvoices().get(selectedIndex);
             frame.getInvNumlbl().setText("" + currentInvHeader.getInvNum());
-            frame.getInvdatelbl().setText("" + currentInvHeader.getInvDate());
-            frame.getCuslbl().setText(currentInvHeader.getCustName());
+            frame.getInvDateTXT().setText("" + currentInvHeader.getInvDate());
+            frame.getCustNameTxt().setText(currentInvHeader.getCustName());
             frame.getTotallbl().setText("" + currentInvHeader.getTotalInv());
+
             ItemsTableModule items = new ItemsTableModule(currentInvHeader.getItem());
             frame.getItemsTbl().setModel(items);
             frame.ChangeName(frame.getItemsTbl(), 0, "No.");
             frame.ChangeName(frame.getItemsTbl(), 1, "Item Name");
             frame.ChangeName(frame.getItemsTbl(), 2, "Item Price");
-            frame.ChangeName(frame.getItemsTbl(), 3, "Item Count");
-            frame.ChangeName(frame.getItemsTbl(), 4, "Total");
+            frame.ChangeName(frame.getItemsTbl(), 3, "Count");
+            frame.ChangeName(frame.getItemsTbl(), 4, "ITem Total");
 
             items.fireTableDataChanged();
 
@@ -264,8 +298,7 @@ public class InvController implements ActionListener, ListSelectionListener {
 
     }
 
-
-private void saveData() {
+    private void saveData() {
         ArrayList<InvoiceHeader> invoices = frame.getInvoices();
         if (invoices != null) {
             String headrs = "";
@@ -309,7 +342,7 @@ private void saveData() {
     }
 
     @SuppressWarnings("empty-statement")
-private void newInvoiceOk() {
+    private void newInvoiceOk() {
 
         String customerName = invoiceDialog.getCustomerName().getText();
         String invoiceDate = invoiceDialog.getInvoiceDate().getText();

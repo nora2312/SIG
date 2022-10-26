@@ -4,6 +4,7 @@
  */
 package proj.view;
 
+import java.awt.Frame;
 import java.util.ArrayList;
 import javax.swing.table.AbstractTableModel;
 import proj.model.InvoiceHeader;
@@ -44,8 +45,27 @@ public class InvoicesTableModel extends AbstractTableModel {
             default:
                 return "";
         }
-        
 
     }
+
+    public void setValueAt(InvoiceHeader aValue, int rowIndex, int columnIndex) {
+        if (rowIndex != -1){
+        InvoiceHeader invoice = invoices.get(rowIndex);
+        switch (columnIndex) {
+            case 0:
+                invoice.setInvNum(aValue.getInvNum());
+                break;
+            case 1:
+                invoice.setInvDate(aValue.getInvDate());
+                break;
+
+            case 2:
+                invoice.setCustName(aValue.getCustName());
+                break;
+
+        }
+        fireTableDataChanged();
+    }}
+
 
 }

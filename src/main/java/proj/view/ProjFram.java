@@ -39,6 +39,7 @@ public class ProjFram extends javax.swing.JFrame {
         newInvBtn = new javax.swing.JButton();
         newInvBtn.addActionListener(controller);
         deltInvBtn = new javax.swing.JButton();
+        jLabel1 = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
         itemsTbl = new javax.swing.JTable();
@@ -47,9 +48,10 @@ public class ProjFram extends javax.swing.JFrame {
         lable3 = new javax.swing.JLabel();
         label4 = new javax.swing.JLabel();
         invNumlbl = new javax.swing.JLabel();
-        invdatelbl = new javax.swing.JLabel();
-        cuslbl = new javax.swing.JLabel();
         totallbl = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        InvDateTXT = new javax.swing.JTextField();
+        CustNameTxt = new javax.swing.JTextField();
         newItemBtn = new javax.swing.JButton();
         delItemBtn = new javax.swing.JButton();
         delItemBtn.addActionListener(this.controller);
@@ -61,6 +63,8 @@ public class ProjFram extends javax.swing.JFrame {
         saveMenuItem.addActionListener(this.controller);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+
+        jPanel1.setName("mmmm"); // NOI18N
 
         headerTbl.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -74,11 +78,19 @@ public class ProjFram extends javax.swing.JFrame {
         ));
         jScrollPane1.setViewportView(headerTbl);
 
-        newInvBtn.setText("New Invoice");
+        newInvBtn.setText("Create New Invoice");
+        newInvBtn.setActionCommand("Create New Invoice");
         newInvBtn.setEnabled(false);
 
         deltInvBtn.setText("Delete Invoice");
         deltInvBtn.setEnabled(false);
+        deltInvBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                deltInvBtnActionPerformed(evt);
+            }
+        });
+
+        jLabel1.setText("Invoices Table");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -86,28 +98,33 @@ public class ProjFram extends javax.swing.JFrame {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 310, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(37, 37, 37)
-                        .addComponent(newInvBtn)
-                        .addGap(28, 28, 28)
-                        .addComponent(deltInvBtn)))
-                .addContainerGap(17, Short.MAX_VALUE))
+                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
+                            .addGap(19, 19, 19)
+                            .addComponent(newInvBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                            .addComponent(deltInvBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(jPanel1Layout.createSequentialGroup()
+                            .addContainerGap()
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 310, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addContainerGap(18, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 290, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addGap(11, 11, 11)
+                .addComponent(jLabel1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 263, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(newInvBtn)
-                    .addComponent(deltInvBtn))
-                .addContainerGap(10, Short.MAX_VALUE))
+                    .addComponent(newInvBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(deltInvBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(22, Short.MAX_VALUE))
         );
 
+        newInvBtn.getAccessibleContext().setAccessibleName("Create New Invoice");
         deltInvBtn.addActionListener(this.controller);
 
         itemsTbl.setModel(new javax.swing.table.DefaultTableModel(
@@ -126,22 +143,13 @@ public class ProjFram extends javax.swing.JFrame {
 
         lable3.setText("Customer Name");
 
-        label4.setText("Price Total");
+        label4.setText("Invoice Total");
 
         invNumlbl.setText(".");
 
-        invdatelbl.setText(".");
-
-        cuslbl.setText(".");
-
         totallbl.setText(".");
 
-        newItemBtn.setText("New Item");
-        newItemBtn.setEnabled(false);
-        newItemBtn.addActionListener(this.controller);
-
-        delItemBtn.setText("Delete Item");
-        delItemBtn.setEnabled(false);
+        jLabel2.setText("Invoices Items");
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -157,19 +165,15 @@ public class ProjFram extends javax.swing.JFrame {
                             .addComponent(lable3)
                             .addComponent(label4, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(27, 27, 27)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(totallbl, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(invNumlbl, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(cuslbl, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(invdatelbl, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(36, 36, 36)
-                        .addComponent(newItemBtn)
-                        .addGap(36, 36, 36)
-                        .addComponent(delItemBtn))
+                            .addComponent(InvDateTXT, javax.swing.GroupLayout.DEFAULT_SIZE, 141, Short.MAX_VALUE)
+                            .addComponent(CustNameTxt)))
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addContainerGap()
-                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 359, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 359, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
@@ -179,26 +183,31 @@ public class ProjFram extends javax.swing.JFrame {
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(label1)
                     .addComponent(invNumlbl))
-                .addGap(16, 16, 16)
+                .addGap(13, 13, 13)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lable2)
-                    .addComponent(invdatelbl))
+                    .addComponent(InvDateTXT, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(lable3)
-                    .addComponent(cuslbl))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                    .addComponent(CustNameTxt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(label4)
                     .addComponent(totallbl))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 162, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(newItemBtn)
-                    .addComponent(delItemBtn))
+                .addGap(8, 8, 8)
+                .addComponent(jLabel2)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 144, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
+
+        newItemBtn.setText("Save");
+        newItemBtn.setEnabled(false);
+        newItemBtn.addActionListener(this.controller);
+
+        delItemBtn.setText("Cancel");
+        delItemBtn.setEnabled(false);
 
         jMenu1.setText("File");
 
@@ -219,22 +228,38 @@ public class ProjFram extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(5, 5, 5)
+                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(82, 82, 82)
+                        .addComponent(newItemBtn)
+                        .addGap(39, 39, 39)
+                        .addComponent(delItemBtn)))
+                .addContainerGap(18, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(14, 14, 14)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(newItemBtn)
+                            .addComponent(delItemBtn))))
+                .addContainerGap())
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void deltInvBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deltInvBtnActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_deltInvBtnActionPerformed
 
     /**
      * @param args the command line arguments
@@ -273,13 +298,15 @@ public class ProjFram extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel cuslbl;
+    private javax.swing.JTextField CustNameTxt;
+    private javax.swing.JTextField InvDateTXT;
     private javax.swing.JButton delItemBtn;
     private javax.swing.JButton deltInvBtn;
     private javax.swing.JTable headerTbl;
     private javax.swing.JLabel invNumlbl;
-    private javax.swing.JLabel invdatelbl;
     private javax.swing.JTable itemsTbl;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JPanel jPanel1;
@@ -297,7 +324,8 @@ public class ProjFram extends javax.swing.JFrame {
     private javax.swing.JLabel totallbl;
     // End of variables declaration//GEN-END:variables
    private InvController controller;
-
+   
+ 
     private ArrayList<InvoiceHeader> invoices;
     private InvoicesTableModel invoiceTable = new InvoicesTableModel(invoices);
 
@@ -313,13 +341,7 @@ public class ProjFram extends javax.swing.JFrame {
         this.invoices = invoices;
     }
 
-    public javax.swing.JLabel getCuslbl() {
-        return cuslbl;
-    }
-
-    public void setCuslbl(javax.swing.JLabel cuslbl) {
-        this.cuslbl = cuslbl;
-    }
+  
 
     public javax.swing.JTable getHeaderTbl() {
         return headerTbl;
@@ -337,14 +359,7 @@ public class ProjFram extends javax.swing.JFrame {
         this.invNumlbl = invNumlbl;
     }
 
-    public javax.swing.JLabel getInvdatelbl() {
-        return invdatelbl;
-    }
-
-    public void setInvdatelbl(javax.swing.JLabel invdatelbl) {
-        this.invdatelbl = invdatelbl;
-    }
-
+ 
     public javax.swing.JTable getItemsTbl() {
         return itemsTbl;
     }
@@ -427,5 +442,21 @@ public class ProjFram extends javax.swing.JFrame {
     public void ChangeName(javax.swing.JTable headerTbl , int col_index, String col_name){
 		headerTbl.getColumnModel().getColumn(col_index).setHeaderValue(col_name);
 	}
+
+    public javax.swing.JTextField getCustNameTxt() {
+        return CustNameTxt;
+    }
+
+    public void setCustNameTxt(javax.swing.JTextField CustNameTxt) {
+        this.CustNameTxt = CustNameTxt;
+    }
+
+    public javax.swing.JTextField getInvDateTXT() {
+        return InvDateTXT;
+    }
+
+    public void setInvDateTXT(javax.swing.JTextField InvDateTXT) {
+        this.InvDateTXT = InvDateTXT;
+    }
 
 }

@@ -1,6 +1,7 @@
 proj\view\ItemsTableModule.class
 proj\view\ProjFram.class
 proj\view\InvoicesTableModel.class
+proj\view\ProjFram$2.class
 proj\model\InvoiceHeader.class
 proj\view\ItemDialog.class
 proj\control\InvController.class
