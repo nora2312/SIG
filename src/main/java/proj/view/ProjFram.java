@@ -79,7 +79,6 @@ public class ProjFram extends javax.swing.JFrame {
         jScrollPane1.setViewportView(headerTbl);
 
         newInvBtn.setText("Create New Invoice");
-        newInvBtn.setActionCommand("Create New Invoice");
         newInvBtn.setEnabled(false);
 
         deltInvBtn.setText("Delete Invoice");
@@ -124,7 +123,6 @@ public class ProjFram extends javax.swing.JFrame {
                 .addContainerGap(22, Short.MAX_VALUE))
         );
 
-        newInvBtn.getAccessibleContext().setAccessibleName("Create New Invoice");
         deltInvBtn.addActionListener(this.controller);
 
         itemsTbl.setModel(new javax.swing.table.DefaultTableModel(
@@ -202,11 +200,11 @@ public class ProjFram extends javax.swing.JFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        newItemBtn.setText("Save");
+        newItemBtn.setText("New Item");
         newItemBtn.setEnabled(false);
         newItemBtn.addActionListener(this.controller);
 
-        delItemBtn.setText("Cancel");
+        delItemBtn.setText("Delete Item");
         delItemBtn.setEnabled(false);
 
         jMenu1.setText("File");

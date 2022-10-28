@@ -53,12 +53,12 @@ public class InvController implements ActionListener, ListSelectionListener {
             case "Delete Invoice":
                 deleteInvoice();
                 break;
-            /*  case "New Item":
+             case "New Item":
                 newItem();
                 break;
             case "Delete Item":
                 deleteItem();
-                break;*/
+                break;
             case "Load Data":
                 loadData();
                 break;
@@ -77,12 +77,12 @@ public class InvController implements ActionListener, ListSelectionListener {
             case "NewItemCancel":
                 NewItemCancel();
                 break;
-            case "Save":
+          /*  case "Save":
                 SaveInvoice();
                 break;
             case "Cancel":
                 CancelInvoice();
-                break;
+                break;*/
 
         }
     }
@@ -121,7 +121,7 @@ public class InvController implements ActionListener, ListSelectionListener {
         }
     }
 
-    private void SaveInvoice() {
+  /*  private void SaveInvoice() {
         int selectRowInv = frame.getHeaderTbl().getSelectedRow();
         if (selectRowInv != -1) {
             String CustName = frame.getCustNameTxt().getText();
@@ -155,9 +155,9 @@ public class InvController implements ActionListener, ListSelectionListener {
             JOptionPane.showMessageDialog(frame, " Select Invoice", "Error", JOptionPane.ERROR_MESSAGE);
         }
 
-    }
+    }*/
 
-    private void CancelInvoice() {
+   /* private void CancelInvoice() {
         int selectRowInv = frame.getHeaderTbl().getSelectedRow();
         if (selectRowInv != -1) {
             InvoiceHeader currentInvHeader = frame.getInvoices().get(selectRowInv);
@@ -170,9 +170,9 @@ public class InvController implements ActionListener, ListSelectionListener {
             JOptionPane.showMessageDialog(frame, "Select invoice", "Error", JOptionPane.ERROR_MESSAGE);
         }
 
-    }
+    }*/
 
-    /* private void newItem() {
+    private void newItem() {
         int selectedRow = frame.getHeaderTbl().getSelectedRow();
         if (selectedRow != -1) {
             itemDialog = new ItemDialog(frame);
@@ -184,9 +184,9 @@ public class InvController implements ActionListener, ListSelectionListener {
             JOptionPane.showMessageDialog(frame, "You Should Select Invoice Header", "Error", JOptionPane.ERROR_MESSAGE);
         }
 
-    }/*
+    }
 
-    /*private void deleteItem() {
+    private void deleteItem() {
         int seletedRowInv = frame.getHeaderTbl().getSelectedRow();
         int selectRowItem = frame.getItemsTbl().getSelectedRow();
         if (selectRowItem != -1 && seletedRowInv != -1) {
@@ -203,7 +203,7 @@ public class InvController implements ActionListener, ListSelectionListener {
             JOptionPane.showMessageDialog(frame, "You Should Select Item", "Error", JOptionPane.ERROR_MESSAGE);
 
         }
-    }*/
+    }
     @Override
     public void valueChanged(ListSelectionEvent e) {
         int selectedIndex = frame.getHeaderTbl().getSelectedRow();

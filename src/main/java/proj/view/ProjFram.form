@@ -167,12 +167,8 @@
         <Component class="javax.swing.JButton" name="newInvBtn">
           <Properties>
             <Property name="text" type="java.lang.String" value="Create New Invoice"/>
-            <Property name="actionCommand" type="java.lang.String" value="Create New Invoice"/>
             <Property name="enabled" type="boolean" value="false"/>
           </Properties>
-          <AccessibilityProperties>
-            <Property name="AccessibleContext.accessibleName" type="java.lang.String" value="Create New Invoice"/>
-          </AccessibilityProperties>
           <AuxValues>
             <AuxValue name="JavaCodeGenerator_CreateCodePost" type="java.lang.String" value="newInvBtn.addActionListener(controller);&#xd;&#xa;"/>
           </AuxValues>
@@ -321,7 +317,7 @@
     </Container>
     <Component class="javax.swing.JButton" name="newItemBtn">
       <Properties>
-        <Property name="text" type="java.lang.String" value="Save"/>
+        <Property name="text" type="java.lang.String" value="New Item"/>
         <Property name="enabled" type="boolean" value="false"/>
       </Properties>
       <AuxValues>
@@ -330,7 +326,7 @@
     </Component>
     <Component class="javax.swing.JButton" name="delItemBtn">
       <Properties>
-        <Property name="text" type="java.lang.String" value="Cancel"/>
+        <Property name="text" type="java.lang.String" value="Delete Item"/>
         <Property name="enabled" type="boolean" value="false"/>
       </Properties>
       <AuxValues>
