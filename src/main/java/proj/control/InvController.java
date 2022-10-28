@@ -113,7 +113,7 @@ public class InvController implements ActionListener, ListSelectionListener {
                 frame.ChangeName(frame.getItemsTbl(), 3, "Count");
                 frame.ChangeName(frame.getItemsTbl(), 4, "ITem Total");
                 itemtable.fireTableDataChanged();
-                System.out.println("invoice deleted");
+                    JOptionPane.showMessageDialog(frame, "Deleted Successfully", "Error", JOptionPane.INFORMATION_MESSAGE);
 
             }
         } catch (Exception e) {
@@ -123,33 +123,53 @@ public class InvController implements ActionListener, ListSelectionListener {
 
     private void SaveInvoice() {
         int selectRowInv = frame.getHeaderTbl().getSelectedRow();
-        if (selectRowInv != -1)
-        {
+        if (selectRowInv != -1) {
+            String CustName = frame.getCustNameTxt().getText();
+            String InvDate = frame.getInvDateTXT().getText();
+            if (InvDate.isBlank()) {
+                JOptionPane.showMessageDialog(frame, "Enter Data, should be DD-MM-YYYY ", "Error", JOptionPane.ERROR_MESSAGE);
+            }if(! InvDate.isBlank()){
+                String[] DateParts = InvDate.split("-");
+                int Day = Integer.parseInt(DateParts[0]);
+                int Month = Integer.parseInt(DateParts[1]);
+                if (DateParts.length < 3) {
+                    JOptionPane.showMessageDialog(frame, "Wrong Data Format, should be DD-MM-YYYY ", "Error", JOptionPane.ERROR_MESSAGE);
+                } else if (Day > 31 || Month > 12) {
+                    JOptionPane.showMessageDialog(frame, "Invaid Date Format", "Error", JOptionPane.ERROR_MESSAGE);
+                }
+                    if (CustName.isBlank() ) {
+                        JOptionPane.showMessageDialog(frame, "Enter Customer Name", "Error", JOptionPane.ERROR_MESSAGE);
 
-            InvoiceHeader inv = new InvoiceHeader(Integer.parseInt(frame.getInvNumlbl().getText()), frame.getInvDateTXT().getText(), frame.getCustNameTxt().getText());
-            frame.getInvoiceTable().setValueAt(inv, selectRowInv, 0);
-            frame.getInvoiceTable().setValueAt(inv, selectRowInv, 1);
-            frame.getInvoiceTable().setValueAt(inv, selectRowInv, 2);
+                    }
+                    if (Day <= 31 && Month <= 12 && ! CustName.isBlank()) {
+                        InvoiceHeader inv = new InvoiceHeader(Integer.parseInt(frame.getInvNumlbl().getText()), frame.getInvDateTXT().getText(), frame.getCustNameTxt().getText());
+                        frame.getInvoiceTable().setValueAt(inv, selectRowInv, 0);
+                        frame.getInvoiceTable().setValueAt(inv, selectRowInv, 1);
+                        frame.getInvoiceTable().setValueAt(inv, selectRowInv, 2);
 
-            System.out.println("row updated");
-        } else
-            JOptionPane.showMessageDialog(frame, "Select invoice", "Error", JOptionPane.ERROR_MESSAGE);
-        
+                    JOptionPane.showMessageDialog(frame, "Saved Successfully", "Error", JOptionPane.INFORMATION_MESSAGE);
+                    }
+                }
+            }
+        else {
+            JOptionPane.showMessageDialog(frame, " Select Invoice", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+
     }
 
     private void CancelInvoice() {
-         int selectRowInv = frame.getHeaderTbl().getSelectedRow();
-        if (selectRowInv != -1)
-        {
-             InvoiceHeader currentInvHeader = frame.getInvoices().get(selectRowInv);
+        int selectRowInv = frame.getHeaderTbl().getSelectedRow();
+        if (selectRowInv != -1) {
+            InvoiceHeader currentInvHeader = frame.getInvoices().get(selectRowInv);
             frame.getInvNumlbl().setText("" + currentInvHeader.getInvNum());
             frame.getInvDateTXT().setText("" + currentInvHeader.getInvDate());
             frame.getCustNameTxt().setText(currentInvHeader.getCustName());
             frame.getTotallbl().setText("" + currentInvHeader.getTotalInv());
             System.out.println("row updated");
-        } else
+        } else {
             JOptionPane.showMessageDialog(frame, "Select invoice", "Error", JOptionPane.ERROR_MESSAGE);
-        
+        }
+
     }
 
     /* private void newItem() {
@@ -351,21 +371,27 @@ public class InvController implements ActionListener, ListSelectionListener {
             String[] DateParts = invoiceDate.split("-");
             int day = Integer.parseInt(DateParts[0]);
             int month = Integer.parseInt(DateParts[1]);
+            if ( customerName.isBlank()) {
+                JOptionPane.showMessageDialog(frame, "Enter Customer", "Error", JOptionPane.ERROR_MESSAGE);
+            } 
             if (DateParts.length < 3) {
                 JOptionPane.showMessageDialog(frame, "Wrong Data Format, should be DD-MM-YYYY ", "Error", JOptionPane.ERROR_MESSAGE);
-            } else if (day > 32 || month > 12) {
+            } 
+             if (day > 32 || month > 12) {
 
                 JOptionPane.showMessageDialog(frame, "Wrong Data Format, should be DD-MM-YYYY", "Error", JOptionPane.ERROR_MESSAGE);
 
-            } else {
+            } if(day <=31 && month <=12 && !customerName.isBlank()) {
                 InvoiceHeader invoice = new InvoiceHeader(invnum, invoiceDate, customerName);
                 frame.getInvoices().add(invoice);
                 frame.getInvoiceTable().fireTableDataChanged();
                 this.invoiceDialog.dispose();
                 invoiceDialog = null;
+                            JOptionPane.showMessageDialog(frame, "Added Successfully", "Error", JOptionPane.INFORMATION_MESSAGE);
+
             }
         } catch (Exception ex) {
-            JOptionPane.showMessageDialog(frame, "Wrong Data Format, should be DD-MM-YYYY", "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(frame, "Wrong Data Format, should be DD-MM-YYYY", "Confirm", JOptionPane.ERROR_MESSAGE);
         }
 
     }
