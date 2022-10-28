@@ -86,7 +86,7 @@ private  InvoiceHeader Invoice ;
     }
         public String  getAsFormatCSV()
     {
-        return Invnum + "," + ItemName+","+ItemName+","+Price+","+Count;
+        return Invnum + "," + ItemName+","+Price+","+Count;
     }
 
    

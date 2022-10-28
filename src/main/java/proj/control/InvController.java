@@ -291,6 +291,7 @@ public class InvController implements ActionListener, ListSelectionListener {
                             itemlist.add(itemss);
                         }
                     } catch (Exception ex) {
+                        ex.printStackTrace();
 
                         JOptionPane.showMessageDialog(frame, "Wrong File Format", "Error", JOptionPane.ERROR_MESSAGE);
                     }
@@ -372,7 +373,7 @@ public class InvController implements ActionListener, ListSelectionListener {
             int day = Integer.parseInt(DateParts[0]);
             int month = Integer.parseInt(DateParts[1]);
             if ( customerName.isBlank()) {
-                JOptionPane.showMessageDialog(frame, "Enter Customer", "Error", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(frame, "Enter Customer Name", "Error", JOptionPane.ERROR_MESSAGE);
             } 
             if (DateParts.length < 3) {
                 JOptionPane.showMessageDialog(frame, "Wrong Data Format, should be DD-MM-YYYY ", "Error", JOptionPane.ERROR_MESSAGE);
